@@ -1,10 +1,17 @@
 from django import forms
-from .models import Transaction, Category
+from .models import Transaction, ExpenseCategory, Income
 
 
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['category', 'title', 'amount', 'date']
+        fields = ['title', 'amount', 'date']
 
-    category = forms.ModelChoiceField(queryset=Category.objects.all())
+    income_source = forms.ModelChoiceField(queryset=Income.objects.all())
+    expense_category = forms.ModelChoiceField(queryset=ExpenseCategory.objects.all())
+
+
+class IncomeForm(forms.ModelForm):
+    class Meta:
+        model = Income
+        fields = ['source', 'amount', 'date']

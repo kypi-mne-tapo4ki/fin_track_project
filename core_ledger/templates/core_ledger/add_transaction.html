@@ -8,6 +8,21 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+
+        <label for="income_source">Income Source:</label>
+        <select name="income_source">
+            {% for income in incomes %}
+                <option value="{{ income.id }}">{{ income.source }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="expense_category">Expense Category:</label>
+        <select name="expense_category">
+            {% for category in expense_categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+
         <button type="submit">Add Transaction</button>
     </form>
 </body>
