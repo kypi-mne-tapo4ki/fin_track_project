@@ -4,7 +4,6 @@ from django.contrib.auth import views as auth_views
 from core_ledger import views
 
 
-
 urlpatterns = [
     path("core_ledger/", include("core_ledger.urls")),
     path('admin/', admin.site.urls),

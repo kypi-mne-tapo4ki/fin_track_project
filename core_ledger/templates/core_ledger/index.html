@@ -4,6 +4,12 @@
     <title>Expense Tracker</title>
 </head>
 <body>
+    <h1>Income History</h1>
+    <ul>
+        {% for income in incomes %}
+            <li>{{ income.source }}   + {{ income.amount }} at {{ income.date }}</li>
+        {% endfor %}
+    </ul>
     <h1>Transaction History</h1>
     <ul>
         {% for transaction in transactions %}
