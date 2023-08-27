@@ -7,7 +7,7 @@
     <h1>{{ category.name }} Transactions</h1>
     <ul>
         {% for transaction in category.transaction_set.all %}
-            <li>{{ transaction.title }} - {{ transaction.amount }}</li>
+            <li>{{ transaction.title }} - {{ transaction.amount }} at {{ transaction.date }}</li>
         {% endfor %}
     </ul>
 </body>

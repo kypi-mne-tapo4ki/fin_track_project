@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Transaction Detail</title>
+</head>
+<body>
+    <h1>Transaction Detail</h1>
+    <p>Title: {{ transaction.title }}</p>
+    <p>Amount: {{ transaction.amount }}</p>
+    <p>Date: {{ transaction.date }}</p>
+    <p>Income: {{ transaction.income_source.source }}</p>
+    <p>Expense category: {{ transaction.expense_category.name }}</p>
+
+    <form method="post" action="{% url 'core_ledger:delete_transaction' transaction.pk %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>

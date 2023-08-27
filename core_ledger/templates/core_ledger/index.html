@@ -7,31 +7,27 @@
     <h1>Income History</h1>
     <ul>
         {% for income in incomes %}
-            <li>{{ income.source }}   + {{ income.amount }} at {{ income.date }}</li>
+            <li>{{ income.source }}   + {{ income.amount }}</li>
         {% endfor %}
     </ul>
 
     <h1>Transaction History</h1>
+    <h3>last five</h3>
     <ul>
         {% for transaction in transactions %}
-            <li>{{ transaction.title }} - {{ transaction.amount }}</li>
+            <li>
+                <a href="{% url 'core_ledger:transaction_detail' transaction.id %}">{{ transaction.title }}</a> - {{ transaction.amount }}
+            </li>
         {% endfor %}
     </ul>
 
-{#    <h1>Expense Category</h1>#}
-{#    <ul>#}
-{#        {% for category in expense_category %}#}
-{#            <li>{{ category.name }} - {{ category.total_this_month }}</li>#}
-{#            <li><a href="{% url 'core_ledger:expense_category' category.id %}">{{ category.name }} - {{ category.total_this_month }}</a></li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
+    <a href="{% url 'core_ledger:transactions'%}">Show all transactions</a>
 
     <h1>Expense Category</h1>
     <ul>
         {% for category in expense_category %}
             <li>
-                {{ category.name }} - {{ category.total }}
-                <a href="{% url 'core_ledger:category_transactions' category.id %}">View Transactions</a>
+                <a href="{% url 'core_ledger:category_transactions' category.id %}">{{ category.name }}</a>  - {{ category.total }}
             </li>
         {% endfor %}
     </ul>

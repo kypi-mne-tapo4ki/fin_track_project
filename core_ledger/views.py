@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.views.generic.detail import DetailView
+from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from .models import ExpenseCategory, Transaction, Income
 from .forms import TransactionForm, IncomeForm
@@ -21,7 +23,7 @@ def register(request):
 
 
 def index(request):
-    transactions = Transaction.objects.all()
+    transactions = Transaction.objects.filter(date__lte=timezone.now()).order_by("date").reverse()[:5]
     incomes = Income.objects.all()
     expense_category = ExpenseCategory.objects.all()
     return render(request,
@@ -79,3 +81,17 @@ class CategoryTransactionsView(DetailView):
     model = ExpenseCategory
     template_name = 'core_ledger/category_transactions.html'
     context_object_name = 'category'
+
+
+class TransactionDetailView(DetailView):
+    model = Transaction
+    template_name = 'core_ledger/transaction_detail.html'
+    context_object_name = 'transaction'
+
+
+class TransactionsView(ListView):
+    template_name = 'core_ledger/transactions.html'
+    context_object_name = 'transactions'
+
+    def get_queryset(self):
+        return Transaction.objects.all()
