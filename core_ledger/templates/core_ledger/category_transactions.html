@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ category.name }} Transactions</title>
+</head>
+<body>
+    <h1>{{ category.name }} Transactions</h1>
+    <ul>
+        {% for transaction in category.transaction_set.all %}
+            <li>{{ transaction.title }} - {{ transaction.amount }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
