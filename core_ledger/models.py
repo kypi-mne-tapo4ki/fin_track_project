@@ -54,6 +54,9 @@ class Transaction(models.Model):
         self.remove_from_expenses()
         super().delete(*args, **kwargs)
 
+    def __str__(self):
+        return self.title
+
 #
 # class Tag(models.Model):
 #     pass
