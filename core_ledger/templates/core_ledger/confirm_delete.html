@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Delete Transaction</title>
+</head>
+<body>
+    <h1>Delete Transaction</h1>
+    <p>Are you sure you want to delete the transaction "{{ transaction.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+    </form>
+</body>
+</html>

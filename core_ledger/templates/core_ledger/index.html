@@ -10,10 +10,29 @@
             <li>{{ income.source }}   + {{ income.amount }} at {{ income.date }}</li>
         {% endfor %}
     </ul>
+
     <h1>Transaction History</h1>
     <ul>
         {% for transaction in transactions %}
             <li>{{ transaction.title }} - {{ transaction.amount }}</li>
+        {% endfor %}
+    </ul>
+
+{#    <h1>Expense Category</h1>#}
+{#    <ul>#}
+{#        {% for category in expense_category %}#}
+{#            <li>{{ category.name }} - {{ category.total_this_month }}</li>#}
+{#            <li><a href="{% url 'core_ledger:expense_category' category.id %}">{{ category.name }} - {{ category.total_this_month }}</a></li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+
+    <h1>Expense Category</h1>
+    <ul>
+        {% for category in expense_category %}
+            <li>
+                {{ category.name }} - {{ category.total }}
+                <a href="{% url 'core_ledger:category_transactions' category.id %}">View Transactions</a>
+            </li>
         {% endfor %}
     </ul>
 </body>
