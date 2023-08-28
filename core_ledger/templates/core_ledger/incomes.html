@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Incomes History</title>
+</head>
+<body>
+    <h1>Incomes History</h1>
+    <ul>
+        {% for income in incomes %}
+            <li>
+                <a href="{% url 'core_ledger:income_detail' income.id %}"></a> +{{ income.amount }} at {{ income.time }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

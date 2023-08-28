@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Transaction History</title>
+</head>
+<body>
     <h1>Transaction History</h1>
     <ul>
         {% for transaction in transactions %}
             <li>
-                <a href="{% url 'core_ledger:transaction_detail' transaction.id %}">{{ transaction.title }}</a> - {{ transaction.amount }}
+                <a href="{% url 'core_ledger:transaction_detail' transaction.id %}">{{ transaction.income_category.title }} --> {{ transaction.expense_category.title }}</a> - {{ transaction.amount }}
             </li>
         {% endfor %}
     </ul>
-</head>
-<body>
-
 </body>
 </html>

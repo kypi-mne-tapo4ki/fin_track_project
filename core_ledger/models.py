@@ -2,60 +2,71 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class ExpenseCategory(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+class Category(models.Model):
+    title = models.CharField(max_length=30, unique=True)
     total = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.name
+        return self.title
+
+
+class ExpenseCategory(Category):
+    pass
+
+
+class IncomeCategory(Category):
+    pass
 
 
 class Income(models.Model):
-    source = models.CharField(max_length=100)
+    category = models.ForeignKey(IncomeCategory, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField()
 
-    def __str__(self):
-        return self.source
+    def move_operation(self):
+        self.category.total += self.amount
+        self.category.save()
+
+    def save(self, *args, **kwargs):
+        self.move_operation()
+        super().save(*args, **kwargs)
+
+    def delete_operation(self):
+        self.category.total -= self.amount
+        self.category.save()
+
+    def delete(self, *args, **kwargs):
+        self.delete_operation()
+        super().delete(*args, **kwargs)
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField()
-    income_source = models.ForeignKey(Income, on_delete=models.CASCADE)
+    income_category = models.ForeignKey(IncomeCategory, on_delete=models.CASCADE)
     expense_category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE)
 
-    def take_from_income(self):
-        if self.income_source.amount >= self.amount:
-            self.income_source.amount -= self.amount
-            self.income_source.save()
+    def move_operation(self):
+        self.income_category.total -= self.amount
+        self.income_category.save()
 
-    def add_to_expenses(self):
         self.expense_category.total += self.amount
         self.expense_category.save()
 
     def save(self, *args, **kwargs):
-        self.take_from_income()
-        self.add_to_expenses()
+        self.move_operation()
         super().save(*args, **kwargs)
 
-    def delete_from_income(self):
-        self.income_source.amount += self.amount
-        self.income_source.save()
+    def delete_operation(self):
+        self.income_category.total += self.amount
+        self.income_category.save()
 
-    def remove_from_expenses(self):
         self.expense_category.total -= self.amount
         self.expense_category.save()
 
     def delete(self, *args, **kwargs):
-        self.delete_from_income()
-        self.remove_from_expenses()
+        self.delete_operation()
         super().delete(*args, **kwargs)
-
-    def __str__(self):
-        return self.title
 
 #
 # class Tag(models.Model):
