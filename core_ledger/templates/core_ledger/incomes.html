@@ -8,7 +8,7 @@
     <ul>
         {% for income in incomes %}
             <li>
-                <a href="{% url 'core_ledger:income_detail' income.id %}"></a> +{{ income.amount }} at {{ income.time }}
+                <a href="{% url 'core_ledger:income_detail' income.id %}"></a> +{{ income.amount }} at {{ income.date.time }}
             </li>
         {% endfor %}
     </ul>

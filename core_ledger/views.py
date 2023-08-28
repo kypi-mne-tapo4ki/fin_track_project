@@ -88,7 +88,7 @@ def delete_transaction(request, pk):
     if request.method == 'POST':
         transaction.delete()
         return redirect('core_ledger:index')
-    return render(request, 'core_ledger/confirm_delete.html', {'transaction': transaction})
+    # return render(request, 'core_ledger/confirm_delete.html', {'transaction': transaction})
 
 
 class ExpenseCategoryView(DetailView):

@@ -21,7 +21,7 @@ class IncomeCategory(Category):
 class Income(models.Model):
     category = models.ForeignKey(IncomeCategory, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
 
     def move_operation(self):
         self.category.total += self.amount
@@ -42,7 +42,7 @@ class Income(models.Model):
 
 class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     income_category = models.ForeignKey(IncomeCategory, on_delete=models.CASCADE)
     expense_category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE)
 
