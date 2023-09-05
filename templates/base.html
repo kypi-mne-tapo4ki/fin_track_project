@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tracker</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'core_ledger:transactions' %}">Transactions</a></li>
+                <li><a href="{% url 'core_ledger:index' %}">Workspase</a></li>
+                {% endif %}
+                <!-- Другие ссылки на страницы вашего проекта -->
+                {% if user.is_authenticated %}
+                    <!-- Если пользователь авторизован, покажем его имя и ссылку на выход -->
+                    <li>Hello, {{ user.first_name }}! <a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <!-- Если пользователь не авторизован, покажем ссылки на регистрацию и вход -->
+                    <li><a href="{% url 'users:login' %}">Login</a></li>
+                    <li><a href="{% url 'users:signup' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <!-- Краткое описание приложения -->
+    {% if request.path == '/' %}
+    <div class="app-description">
+        <h1>Welcome to Financial Tracker</h1>
+        <p>Track your income, expenses, and manage your finances easily with Financial Tracker.</p>
+    </div>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
