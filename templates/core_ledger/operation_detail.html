@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Operation Detail</h1>
+    <p>Source: {{ operation.source.title }}</p>
+    <p>Destination: {{ operation.destination.title }}</p>
+    <p>Amount: {{ operation.amount }}</p>
+    <p>Date: {{ operation.date }}</p>
+
+
+    <form method="post" action="{% url 'core_ledger:delete_operation' operation.pk %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+{% endblock %}

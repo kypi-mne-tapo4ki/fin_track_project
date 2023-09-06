@@ -5,8 +5,8 @@ from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from .models import ExpenseCategory, Transaction, IncomeCategory, Income
-from .forms import TransactionForm, IncomeForm
+from .models import Category, Operation, Tag, CategoryType
+from .forms import OperationForm, CategoryForm, TagForm
 
 
 def home(request):
@@ -15,127 +15,118 @@ def home(request):
 
 @login_required(login_url='users:login')
 def index(request):
-    transactions = Transaction.objects.filter(date__lte=timezone.now()).order_by("date").reverse()[:5]
-    incomes = IncomeCategory.objects.all()
-    expense_category = ExpenseCategory.objects.all()
+    operations = Operation.objects.all()
+    last_operations = Operation.objects.filter(date__lte=timezone.now()).order_by("date").reverse()[:5]
+    source_categories = Category.objects.filter(category_type=CategoryType.SOURCE)
+    storage_categories = Category.objects.filter(category_type=CategoryType.STORAGE)
+    expense_categories = Category.objects.filter(category_type=CategoryType.EXPENSE)
+    tags = Tag.objects.all()
     return render(request,
                   'core_ledger/index.html',
                   {
-                      'transactions': transactions,
-                      'incomes': incomes,
-                      'expense_category': expense_category,
+                      'operations': operations,
+                      'last_operations': last_operations,
+                      'source_categories': source_categories,
+                      'storage_categories': storage_categories,
+                      'expense_categories': expense_categories,
+                      'tags': tags,
                   },)
 
 
-def add_expense_category(request):
+def add_category(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        ExpenseCategory.objects.create(name=name)
-        return redirect('core_ledger:index')
-    return render(request, 'core_ledger/add_expense_category.html')
-
-
-def add_income_category(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        IncomeCategory.objects.create(name=name)
-        return redirect('core_ledger:index')
-    return render(request, 'core_ledger/add_income_category.html')
-
-
-def add_income(request):
-    if request.method == 'POST':
-        form = IncomeForm(request.POST)
+        form = CategoryForm(request.POST)
         if form.is_valid():
-            new_income = form.save(commit=False)
-            new_income.save()
+            category = form.save(commit=False)
+            category.save()
             return redirect('core_ledger:index')
     else:
-        form = IncomeForm()
-    return render(request, 'core_ledger/add_income.html', {'form': form})
+        form = CategoryForm()
+    return render(request, 'core_ledger/add_category.html', {'form': form})
 
 
-def delete_income(request, pk):
-    income = get_object_or_404(Income, pk=pk)
+def add_operation(request):
     if request.method == 'POST':
-        income.delete()
-        return redirect('core_ledger:index')
-    # return render(request, 'core_ledger/confirm_delete.html', {'transaction': transaction})
-
-
-def add_transaction(request):
-    if request.method == 'POST':
-        form = TransactionForm(request.POST)
+        form = OperationForm(request.POST)
         if form.is_valid():
-            transaction = form.save(commit=False)
-            transaction.save()
+            operation = form.save(commit=False)
+            operation.date = timezone.now()
+            operation.save()
             return redirect('core_ledger:index')
     else:
-        form = TransactionForm()
-    return render(request, 'core_ledger/add_transaction.html', {'form': form})
+        form = OperationForm()
+    return render(request, 'core_ledger/add_operation.html', {'form': form})
 
 
-def delete_transaction(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk)
+def add_tag(request):
     if request.method == 'POST':
-        transaction.delete()
+        form = TagForm(request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.save()
+            return redirect('core_ledger:index')
+    else:
+        form = TagForm()
+    return render(request, 'core_ledger/add_tag.html', {'form': form})
+
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        category.delete()
         return redirect('core_ledger:index')
-    # return render(request, 'core_ledger/confirm_delete.html', {'transaction': transaction})
+    return render(request, 'core_ledger/confirm_delete.html', {'object': category})
 
 
-class ExpenseCategoryView(DetailView):
-    """
-    Shows transactions in a single category
-    """
-    model = ExpenseCategory
-    template_name = 'core_ledger/expense_category.html'
-    context_object_name = 'expense_category'
+def delete_operation(request, pk):
+    operation = get_object_or_404(Operation, pk=pk)
+    if request.method == 'POST':
+        operation.delete()
+        return redirect('core_ledger:index')
+    return render(request, 'core_ledger/confirm_delete.html', {'object': operation})
 
 
-class TransactionDetailView(DetailView):
-    """
-    Shows a single transaction
-    """
-    model = Transaction
-    template_name = 'core_ledger/transaction_detail.html'
-    context_object_name = 'transaction'
+def delete_tag(request, pk):
+    tag = get_object_or_404(Tag, pk=pk)
+    if request.method == 'POST':
+        tag.delete()
+        return redirect('core_ledger:index')
+    return render(request, 'core_ledger/confirm_delete.html', {'object': tag})
 
 
-class TransactionsView(ListView):
+class CategoryView(DetailView):
     """
-    Shows transactions for all time
+    Show operations in a single category
     """
-    template_name = 'core_ledger/transactions.html'
-    context_object_name = 'transactions'
+    model = Category
+    template_name = 'core_ledger/category_detail.html'
+    context_object_name = 'category'
+
+
+class OperationDetailView(DetailView):
+    """
+    Show a single operation
+    """
+    model = Operation
+    template_name = 'core_ledger/operation_detail.html'
+    context_object_name = 'operation'
+
+
+class TagDetailView(DetailView):
+    """
+    Show a single operation
+    """
+    model = Tag
+    template_name = 'core_ledger/tag_detail.html'
+    context_object_name = 'tag'
+
+
+class OperationsView(ListView):
+    """
+    Show operations for all time
+    """
+    template_name = 'core_ledger/operations.html'
+    context_object_name = 'operations'
 
     def get_queryset(self):
-        return Transaction.objects.all().order_by('date').reverse()
-
-
-class IncomeCategoryView(DetailView):
-    """
-    Shows incomes in a single category
-    """
-    model = IncomeCategory
-    template_name = 'core_ledger/income_category.html'
-    context_object_name = 'income_category'
-
-
-class IncomeDetailView(DetailView):
-    """
-    Shows a single income
-    """
-    model = Income
-    template_name = 'core_ledger/income_detail.html'
-    context_object_name = 'income'
-
-
-class IncomesView(ListView):
-    """
-    Shows incomes for all time
-    """
-    template_name = 'core_ledger/incomes.html'
-    context_object_name = 'incomes'
-
-    def get_queryset(self):
-        return Income.objects.all().order_by('date').reverse()
+        return Operation.objects.all().order_by('date').reverse()

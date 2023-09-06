@@ -1,15 +1,21 @@
 from django import forms
 
-from .models import Transaction, Income
+from .models import Operation, Category, CategoryType, Tag
 
 
-class TransactionForm(forms.ModelForm):
+class OperationForm(forms.ModelForm):
     class Meta:
-        model = Transaction
-        fields = ['amount', 'income_category', 'expense_category', ]
+        model = Operation
+        fields = ['user', 'source', 'destination', 'amount', 'tag']
 
 
-class IncomeForm(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
     class Meta:
-        model = Income
-        fields = ['amount', 'category', ]
+        model = Category
+        fields = ['user', 'title', 'category_type']
+
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['title', 'binding']

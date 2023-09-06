@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Workspace{% endblock %}
+{% block content %}
+    <h2>Add New Operation</h2>
+    <a href="{% url 'core_ledger:add_operation' %}">New Operation</a>
+
+    <h2>Add New Category</h2>
+    <a href="{% url 'core_ledger:add_category' %}">New Category</a>
+
+    <h2>Sources List</h2>
+    <ul>
+        {% for source in source_categories %}
+            <li>
+                <a href="{% url 'core_ledger:category' source.id %}">{{ source.title }}</a> {{ source.total }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Storage List</h2>
+    <ul>
+        {% for storage in storage_categories %}
+            <li>
+                <a href="{% url 'core_ledger:category' storage.id %}">{{ storage.title }}</a> - {{ storage.total }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Expenses List</h2>
+    <ul>
+        {% for category in expense_categories %}
+            <li>
+                <a href="{% url 'core_ledger:category' category.id %}">{{ category.title }}</a> - {{ category.total }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Last 5 Operations</h2>
+    <ul>
+        {% for operation in last_operations %}
+            <li>
+                <a href="{% url 'core_ledger:operation' operation.id %}">
+                    {{ operation.source.title }} -> {{ operation.destination.title }}</a> - {{ operation.amount }}
+                    {{ operation.date|date:'d.m.Y' }} {{ operation.date|time:'H:i' }} {{ operation.tag.title }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'core_ledger:operations'%}">Show all operations</a>
+
+    <h2>Tag List</h2>
+    <ul>
+        {% for tag in tags %}
+            <li>
+                <a href="{% url 'core_ledger:tag' tag.id %}">{{ tag.title }}</a> - {{ tag.binding }}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

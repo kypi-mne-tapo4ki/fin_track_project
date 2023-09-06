@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Tag Detail</h1>
+    <p>Title: {{ tag.title }}</p>
+    <p>Binding: {{ tag.binding.title }}</p>
+
+    <form method="post" action="{% url 'core_ledger:delete_tag' tag.pk %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+{% endblock %}
