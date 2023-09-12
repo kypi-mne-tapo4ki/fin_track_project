@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ category.title }} Operations</h1>
+    <ul>
+        {% for operation in category.category_operations %}
+            <li>
+                <a href="{% url 'core_ledger:operation' operation.id %}">{{ operation.source.title }} --> {{ operation.destination.title }}</a>   -{{ operation.amount }} at {{ operation.date.time }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
