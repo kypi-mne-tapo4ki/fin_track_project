@@ -7,7 +7,9 @@ class OperationForm(forms.ModelForm):
     class Meta:
         model = Operation
         fields = ['user', 'source', 'destination', 'amount', 'tag']
-
+        widgets = {
+            'tag': forms.CheckboxSelectMultiple,
+        }
 
 class CategoryForm(forms.ModelForm):
     class Meta:

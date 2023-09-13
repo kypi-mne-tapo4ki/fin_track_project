@@ -20,7 +20,6 @@ def index(request):
     source_categories = Category.objects.filter(category_type=CategoryType.SOURCE)
     storage_categories = Category.objects.filter(category_type=CategoryType.STORAGE)
     expense_categories = Category.objects.filter(category_type=CategoryType.EXPENSE)
-    tags = Tag.objects.all()
     return render(request,
                   'core_ledger/index.html',
                   {
@@ -29,7 +28,6 @@ def index(request):
                       'source_categories': source_categories,
                       'storage_categories': storage_categories,
                       'expense_categories': expense_categories,
-                      'tags': tags,
                   },)
 
 
@@ -52,6 +50,7 @@ def add_operation(request):
             operation = form.save(commit=False)
             operation.date = timezone.now()
             operation.save()
+            form.save_m2m()
             return redirect('core_ledger:index')
     else:
         form = OperationForm()

@@ -13,8 +13,8 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'core_ledger:operations' %}">Operations</a></li>
-                <li><a href="{% url 'core_ledger:index' %}">Workspace</a></li>
+                    <li><a href="{% url 'core_ledger:operations' %}">Operations</a></li>
+                    <li><a href="{% url 'core_ledger:index' %}">Workspace</a></li>
                 {% endif %}
                 <!-- Другие ссылки на страницы вашего проекта -->
                 {% if user.is_authenticated %}

@@ -4,6 +4,12 @@
     <p>Title: {{ tag.title }}</p>
     <p>Binding: {{ tag.binding.title }}</p>
 
+    <h2>Operations with Tag</h2>
+    {% for operation in tag.tag_operations %}
+        <p>{{ operation.date|date:'d.m.Y H:i' }}</p>
+        <p>{{ operation }}</p>
+        <p>___________________________________</p>
+    {% endfor %}
     <form method="post" action="{% url 'core_ledger:delete_tag' tag.pk %}">
         {% csrf_token %}
         <button type="submit">Delete</button>
