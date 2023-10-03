@@ -7,6 +7,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path("core_ledger/", include("core_ledger.urls")),
     path('admin/', admin.site.urls),
-    path('auth/', include('users.urls')),
-    path('auth/', include('django.contrib.auth.urls')),
+    path('auth/', include('authentication.urls', namespace='auth')),
+
 ]
