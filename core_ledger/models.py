@@ -33,6 +33,9 @@ class Tag(models.Model):
     def __str__(self):
         return self.title
 
+    def tag_operations(self):
+        return [operation for operation in Operation.objects.filter(tag=self.id, )][::-1]
+
 
 class Operation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -40,4 +43,10 @@ class Operation(models.Model):
     destination = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='operation_destination')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField()
-    tag = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
+    tag = models.ManyToManyField(Tag, blank=True)
+
+    def __str__(self):
+        return f'{self.source} --> {self.destination} : {self.amount}'
+
+    def operation_tags(self):
+        return [tag for tag in self.tag.all()]

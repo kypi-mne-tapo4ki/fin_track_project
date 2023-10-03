@@ -1,59 +1,108 @@
 {% extends "base.html" %}
-{% block title %}Workspace{% endblock %}
+{% load static %}
+
+{% block title %}
+    Workspace
+{% endblock %}
+
 {% block content %}
-    <h2>Add New Operation</h2>
-    <a href="{% url 'core_ledger:add_operation' %}">New Operation</a>
+    <!-- Buttons for creation new Operation and new Category -->
+    <div class="add-buttons">
+        <a class="btn btn-primary" href="{% url 'core_ledger:add_operation' %}">New Operation</a>
+        <a class="btn btn-primary" href="{% url 'core_ledger:add_category' %}">New Category</a>
+    </div>
 
-    <h2>Add New Category</h2>
-    <a href="{% url 'core_ledger:add_category' %}">New Category</a>
-
-    <h2>Sources List</h2>
-    <ul>
-        {% for source in source_categories %}
-            <li>
-                <a href="{% url 'core_ledger:category' source.id %}">{{ source.title }}</a> {{ source.total }}
-            </li>
-        {% endfor %}
-    </ul>
-
-    <h2>Storage List</h2>
-    <ul>
-        {% for storage in storage_categories %}
-            <li>
-                <a href="{% url 'core_ledger:category' storage.id %}">{{ storage.title }}</a> - {{ storage.total }}
-            </li>
-        {% endfor %}
-    </ul>
-
-    <h2>Expenses List</h2>
-    <ul>
-        {% for category in expense_categories %}
-            <li>
-                <a href="{% url 'core_ledger:category' category.id %}">{{ category.title }}</a> - {{ category.total }}
-            </li>
-        {% endfor %}
-    </ul>
-
+    <!-- Last 5 Operations List -->
     <h2>Last 5 Operations</h2>
-    <ul>
+    <ul class="list-unstyled last-operations">
         {% for operation in last_operations %}
             <li>
-                <a href="{% url 'core_ledger:operation' operation.id %}">
-                    {{ operation.source.title }} -> {{ operation.destination.title }}</a> - {{ operation.amount }}
-                    {{ operation.date|date:'d.m.Y' }} {{ operation.date|time:'H:i' }} {{ operation.tag.title }}
+                <span class="operation-info">
+                    <a href="{% url 'core_ledger:operation' operation.id %}">
+                        {{ operation.source.title }} -> {{ operation.destination.title }}</a>
+                    - {{ operation.amount }}
+                </span>
+                <span class="operation-date">
+                    {{ operation.date|date:'d.m.Y H:i' }}
+                </span>
+                <span class="operation-tag">
+                    {% for tag in operation.operation_tags %}
+                        <a href="{% url 'core_ledger:tag' tag.id %}">{{ tag.title }}</a>
+                    {% endfor %}
+                </span>
             </li>
         {% endfor %}
     </ul>
 
-    <a href="{% url 'core_ledger:operations'%}">Show all operations</a>
+    <!-- Table for Source List -->
+    <h2>Source List</h2>
+    <table class="table table-bordered category-table">
+        <tbody>
+            {% for category in source_categories %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    <tr>
+                {% endif %}
+                <td class="category-cell">
+                    <a href="{% url 'core_ledger:category' category.id %}" class="category-link">
+                        <div class="category-info">
+                            <span class="category-title">{{ category.title }}</span><br>
+                            <img src="{% static 'images/placeholder-icon.png' %}" alt="Placeholder Icon" class="category-icon">
+                        </div>
+                    </a>
+                    <span class="category-total">{{ category.total }}</span>
+                </td>
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 
-    <h2>Tag List</h2>
-    <ul>
-        {% for tag in tags %}
-            <li>
-                <a href="{% url 'core_ledger:tag' tag.id %}">{{ tag.title }}</a> - {{ tag.binding }}
-            </li>
-        {% endfor %}
-    </ul>
+    <!-- Table for Storage List -->
+    <h2>Storage List</h2>
+    <table class="table table-bordered category-table">
+        <tbody>
+            {% for category in storage_categories %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    <tr>
+                {% endif %}
+                <td class="category-cell">
+                    <a href="{% url 'core_ledger:category' category.id %}" class="category-link">
+                        <div class="category-info">
+                            <span class="category-title">{{ category.title }}</span><br>
+                            <img src="{% static 'images/placeholder-icon.png' %}" alt="Placeholder Icon" class="category-icon">
+                        </div>
+                    </a>
+                    <span class="category-total">{{ category.total }}</span>
+                </td>
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 
+    <!-- Table for Expense List -->
+    <h2>Expense List</h2>
+    <table class="table table-bordered category-table">
+        <tbody>
+            {% for category in expense_categories %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    <tr>
+                {% endif %}
+                <td class="category-cell">
+                    <a href="{% url 'core_ledger:category' category.id %}" class="category-link">
+                        <div class="category-info">
+                            <span class="category-title">{{ category.title }}</span><br>
+                            <img src="{% static 'images/placeholder-icon.png' %}" alt="Placeholder Icon" class="category-icon">
+                        </div>
+                    </a>
+                    <span class="category-total">{{ category.total }}</span>
+                </td>
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

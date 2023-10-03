@@ -6,6 +6,11 @@
     <p>Amount: {{ operation.amount }}</p>
     <p>Date: {{ operation.date }}</p>
 
+    <p>Tags:
+        {% for tag in operation.tag.all %}
+            <li>{{ tag.title }}</li>
+        {% endfor %}
+    </p>
 
     <form method="post" action="{% url 'core_ledger:delete_operation' operation.pk %}">
         {% csrf_token %}
