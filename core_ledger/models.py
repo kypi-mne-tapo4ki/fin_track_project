@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import CustomUser as User
+from authentication.models import User
 
 
 class CategoryType(models.TextChoices):

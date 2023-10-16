@@ -13,7 +13,6 @@ def home(request):
     return render(request, 'base.html')
 
 
-@login_required(login_url='users:login')
 def index(request):
     operations = Operation.objects.all()
     last_operations = Operation.objects.filter(date__lte=timezone.now()).order_by("date").reverse()[:5]

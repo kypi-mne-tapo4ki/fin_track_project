@@ -22,8 +22,8 @@
                     <li>Hello, {{ user.first_name }}! <a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                     <!-- Если пользователь не авторизован, покажем ссылки на регистрацию и вход -->
-                    <li><a href="{% url 'users:login' %}">Login</a></li>
-                    <li><a href="{% url 'users:signup' %}">Sign Up</a></li>
+                    <li><a href="{% url 'authentication:login' %}">Login</a></li>
+                    <li><a href="{% url 'authentication:signup' %}">Sign Up</a></li>
                 {% endif %}
             </ul>
         </nav>

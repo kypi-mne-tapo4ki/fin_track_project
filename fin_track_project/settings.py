@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'core_ledger.apps.CoreLedgerConfig',
-    'users.apps.UsersConfig',
+    'authentication.apps.AuthenticationConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,13 +87,13 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'authentication.User'
 
-LOGIN_URL = 'users:login'
+LOGIN_URL = 'authentication:login'
 
 LOGIN_REDIRECT_URL = 'core_ledger:index'
 
-LOGOUT_URL = 'users:logout'
+LOGOUT_URL = 'authentication:logout'
 
 
 # Password validation
